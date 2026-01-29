@@ -4,8 +4,8 @@ Tasks are ordered by dependency. Agents: pick an unchecked task, implement it, t
 
 ## 1. Project bootstrap
 
-- [ ] Run `flutter create` with org and project name; set min iOS/Android versions in pubspec.
-- [ ] Add dependencies in pubspec.yaml: `provider` or `riverpod`, `shared_preferences`.
+- [x] Run `flutter create` with org and project name; set min iOS/Android versions in pubspec.
+- [x] Add dependencies in pubspec.yaml: `provider` or `riverpod`, `shared_preferences`.
 
 ## 2. Dev container
 
