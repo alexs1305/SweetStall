@@ -1,0 +1,27 @@
+{
+  "name": "SweetStall Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.flutter",
+        "Dart-Code.dart-code",
+        "ms-vsliveshare.vsliveshare"
+      ]
+    }
+  },
+  "remoteUser": "vscode",
+  "forwardPorts": [8080, 3000],
+  "postCreateCommand": "flutter doctor",
+  "postStartCommand": "flutter precache",
+  "containerEnv": {
+    "ANDROID_SDK_ROOT": "/opt/android-sdk",
+    "ANDROID_HOME": "/opt/android-sdk",
+    "JAVA_HOME": "/usr/lib/jvm/java-11-openjdk-amd64"
+  },
+  "settings": {
+    "dart.flutterSdkPath": "/usr/local/flutter"
+  }
+}
