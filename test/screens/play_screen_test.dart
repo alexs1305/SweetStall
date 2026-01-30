@@ -48,13 +48,16 @@ void main() {
     expect(find.textContaining('Days left'), findsOneWidget);
   });
 
-  testWidgets('PlayScreen shows sweets from GameData with Buy 1 and Sell 1', (WidgetTester tester) async {
+  testWidgets('PlayScreen shows sweets from GameData with buy and sell actions',
+      (WidgetTester tester) async {
     await tester.pumpWidget(buildTestWidget());
 
     for (final sweet in GameData.sweets) {
       expect(find.text(sweet.name), findsOneWidget);
     }
     expect(find.text('Buy 1'), findsNWidgets(GameData.sweets.length));
+    expect(find.text('Buy Max'), findsNWidgets(GameData.sweets.length));
     expect(find.text('Sell 1'), findsNWidgets(GameData.sweets.length));
+    expect(find.text('Sell All'), findsNWidgets(GameData.sweets.length));
   });
 }
