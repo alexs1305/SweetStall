@@ -17,10 +17,10 @@ class GameState extends ChangeNotifier {
   final double startingCash;
   final Random _random;
   static const double _marketEventChance = 0.2;
-  static const double _crashMultiplierMin = 0.55;
-  static const double _crashMultiplierMax = 0.8;
-  static const double _surgeMultiplierMin = 1.25;
-  static const double _surgeMultiplierMax = 1.6;
+  static const double _crashMultiplierMin = 0.66;
+  static const double _crashMultiplierMax = 0.9;
+  static const double _surgeMultiplierMin = 2;
+  static const double _surgeMultiplierMax = 4;
 
   late Player _player;
   late Market _market;
