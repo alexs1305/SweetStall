@@ -15,12 +15,12 @@ Tasks are ordered by dependency. Agents: pick an unchecked task, implement it, t
 
 ## 3. Models and static data
 
-- [ ] Create `lib/models/sweet.dart` (id, name).
-- [ ] Create `lib/models/location.dart` (id, name, per-sweet buy/sell price ranges).
-- [ ] Create `lib/models/player.dart` (cash, inventory map, currentLocationId).
-- [ ] Create `lib/models/market.dart` (current buy/sell prices per sweet for current location).
-- [ ] Create `lib/models/leaderboard_entry.dart` (score, optional name, optional date).
-- [ ] Create `lib/data/game_data.dart` with 2–3 locations and 3–5 sweets and example price ranges.
+- [x] Create `lib/models/sweet.dart` (id, name).
+- [x] Create `lib/models/location.dart` (id, name, per-sweet buy/sell price ranges).
+- [x] Create `lib/models/player.dart` (cash, inventory map, currentLocationId).
+- [x] Create `lib/models/market.dart` (current buy/sell prices per sweet for current location).
+- [x] Create `lib/models/leaderboard_entry.dart` (score, optional name, optional date).
+- [x] Create `lib/data/game_data.dart` with 2–3 locations and 3–5 sweets and example price ranges.
 
 ## 4. Leaderboard persistence
 
