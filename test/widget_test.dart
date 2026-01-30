@@ -28,7 +28,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Play'), findsOneWidget);
-    expect(find.text('End day'), findsOneWidget);
+    expect(find.text('Travel to a new location (−1 day)'), findsOneWidget);
     expect(find.text('Return home'), findsOneWidget);
   });
 }

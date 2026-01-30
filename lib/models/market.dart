@@ -16,14 +16,26 @@ class Market {
     DateTime? generatedAt,
   }) : generatedAt = generatedAt ?? DateTime.now();
 
+  /// Sell price is derived as 85–97% of buy price: close spread at same
+  /// market, but volatile buy ranges across locations allow profit by
+  /// buying low in one place and selling higher in another.
+  static const double _sellMultiplierMin = 0.85;
+  static const double _sellMultiplierMax = 0.97;
+
   factory Market.fromLocation(Location location, {Random? random}) {
     final seed = random ?? Random();
     final buy = <String, double>{};
     final sell = <String, double>{};
 
     for (final entry in location.sweetPriceRanges.entries) {
-      buy[entry.key] = _sample(entry.value.buy, seed);
-      sell[entry.key] = _sample(entry.value.sell, seed);
+      final buyPrice = _sample(entry.value.buy, seed);
+      // Sell is a fraction of buy: always lower, but close enough that
+      // travelling can yield sell price > previous buy price.
+      final multiplier = _sellMultiplierMin +
+          (_sellMultiplierMax - _sellMultiplierMin) * seed.nextDouble();
+      final sellPrice = (buyPrice * multiplier * 100).round() / 100;
+      buy[entry.key] = buyPrice;
+      sell[entry.key] = sellPrice;
     }
 
     return Market(

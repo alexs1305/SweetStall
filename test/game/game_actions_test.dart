@@ -41,23 +41,25 @@ void main() {
   });
 
   group('GameActions.setLocation', () {
-    test('returns false for same location', () {
+    test('returns false for same location', () async {
       final currentId = gameState.player.currentLocationId;
-      expect(gameActions.setLocation(currentId), isFalse);
+      expect(await gameActions.setLocation(currentId), isFalse);
     });
 
-    test('returns false for invalid location id', () {
-      expect(gameActions.setLocation('nonexistent'), isFalse);
+    test('returns false for invalid location id', () async {
+      expect(await gameActions.setLocation('nonexistent'), isFalse);
     });
 
-    test('updates player and market when moving to another location', () {
+    test('updates player and market when moving to another location', () async {
       final other = GameData.locations
           .firstWhere((l) => l.id != gameState.player.currentLocationId);
       final oldMarketId = gameState.market.locationId;
-      expect(gameActions.setLocation(other.id), isTrue);
+      expect(gameState.daysLeft, 5);
+      expect(await gameActions.setLocation(other.id), isTrue);
       expect(gameState.player.currentLocationId, other.id);
       expect(gameState.market.locationId, other.id);
       expect(gameState.market.locationId, isNot(equals(oldMarketId)));
+      expect(gameState.daysLeft, 4);
     });
   });
 

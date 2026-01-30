@@ -8,7 +8,7 @@ class GameActions {
 
   GameActions(this.gameState);
 
-  bool setLocation(String locationId) {
+  Future<bool> setLocation(String locationId) async {
     if (gameState.isGameOver) return false;
     Location? target;
     for (final location in gameState.allLocations) {
@@ -26,6 +26,8 @@ class GameActions {
       gameState.player.copyWith(currentLocationId: target.id),
     );
     gameState.updateMarket(gameState.rollMarket(target));
+    // Moving between locations costs 1 day
+    await advanceTime();
     return true;
   }
 

@@ -15,7 +15,7 @@ void main() {
       sweetPriceRanges: {
         'bubble': SweetPriceRange(
           buy: PriceRange(min: 4.0, max: 6.0),
-          sell: PriceRange(min: 8.0, max: 10.0),
+          sell: PriceRange(min: 2.0, max: 3.5),
         ),
       },
     );
@@ -37,11 +37,23 @@ void main() {
       expect(price, lessThanOrEqualTo(6.0));
     });
 
-    test('priceFor returns sell price when buying: false', () {
+    test('priceFor returns sell price when buying: false (85–97% of buy)', () {
       final market = Market.fromLocation(location, random: Random(0));
-      final price = market.priceFor('bubble', buying: false);
-      expect(price, greaterThanOrEqualTo(8.0));
-      expect(price, lessThanOrEqualTo(10.0));
+      final buyPrice = market.priceFor('bubble', buying: true);
+      final sellPrice = market.priceFor('bubble', buying: false);
+      expect(sellPrice, greaterThanOrEqualTo(buyPrice * 0.84));
+      expect(sellPrice, lessThanOrEqualTo(buyPrice * 0.98));
+      expect(sellPrice, lessThan(buyPrice));
+    });
+
+    test('sell price is always lower than buy price', () {
+      for (var seed = 0; seed < 100; seed++) {
+        final market = Market.fromLocation(location, random: Random(seed));
+        final buyPrice = market.priceFor('bubble', buying: true);
+        final sellPrice = market.priceFor('bubble', buying: false);
+        expect(sellPrice, lessThan(buyPrice),
+            reason: 'Sell price $sellPrice must be < buy price $buyPrice');
+      }
     });
 
     test('priceFor returns 0 for unknown sweet', () {
