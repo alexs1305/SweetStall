@@ -5,6 +5,7 @@ import 'package:sweetstall/data/game_data.dart';
 import 'package:sweetstall/game/game_state.dart';
 import 'package:sweetstall/models/leaderboard_entry.dart';
 import 'package:sweetstall/models/location.dart';
+import 'package:sweetstall/models/market_event.dart';
 import 'package:sweetstall/models/player.dart';
 import 'package:sweetstall/services/leaderboard_service.dart';
 
@@ -29,6 +30,44 @@ class FakeLeaderboardService implements LeaderboardService {
     _entries.add(entry);
     _entries.sort((a, b) => b.score.compareTo(a.score));
     return List.unmodifiable(_entries);
+  }
+}
+
+class SequenceRandom extends Random {
+  SequenceRandom({
+    required List<double> doubles,
+    List<int>? ints,
+    List<bool>? bools,
+  })  : _doubles = doubles,
+        _ints = ints ?? const [0],
+        _bools = bools ?? const [false];
+
+  final List<double> _doubles;
+  final List<int> _ints;
+  final List<bool> _bools;
+  int _doubleIndex = 0;
+  int _intIndex = 0;
+  int _boolIndex = 0;
+
+  @override
+  double nextDouble() {
+    final value = _doubles[_doubleIndex % _doubles.length];
+    _doubleIndex += 1;
+    return value;
+  }
+
+  @override
+  int nextInt(int max) {
+    final value = _ints[_intIndex % _ints.length] % max;
+    _intIndex += 1;
+    return value;
+  }
+
+  @override
+  bool nextBool() {
+    final value = _bools[_boolIndex % _bools.length];
+    _boolIndex += 1;
+    return value;
   }
 }
 
@@ -71,11 +110,22 @@ void main() {
       );
       state.updatePlayer(state.player.copyWith(cash: 0));
       state.updateDaysLeft(0);
+      state.updateMarketWithEvent(
+        state.market,
+        MarketEvent(
+          id: 1,
+          sweetId: 'bubble',
+          type: MarketEventType.shortage,
+          priceMultiplier: 1.4,
+          occurredAt: DateTime(2024),
+        ),
+      );
       state.resetGame();
       expect(state.player.cash, 50);
       expect(state.daysLeft, 5);
       expect(state.player.inventory, isEmpty);
       expect(state.isGameOver, isFalse);
+      expect(state.marketEvent, isNull);
     });
 
     test('resetGame with args uses provided cash and days', () {
@@ -98,6 +148,34 @@ void main() {
       final market = state.rollMarket(other);
       expect(market.locationId, other.id);
       expect(market.buyPrices, isNotEmpty);
+    });
+
+    test('rollMarketEvent returns null when chance fails', () {
+      final fake = FakeLeaderboardService();
+      final state = GameState.withDefaults(
+        fake,
+        random: SequenceRandom(doubles: [0.95]),
+      );
+      final event = state.rollMarketEvent(GameData.locations.first);
+      expect(event, isNull);
+    });
+
+    test('rollMarketEvent returns event with sweet and type', () {
+      final fake = FakeLeaderboardService();
+      final state = GameState.withDefaults(
+        fake,
+        random: SequenceRandom(
+          doubles: [0.1, 0.0],
+          ints: [1],
+          bools: [true],
+        ),
+      );
+      final event = state.rollMarketEvent(GameData.locations.first);
+      expect(event, isNotNull);
+      expect(event!.sweetId, GameData.locations.first.availableSweetIds[1]);
+      expect(event.type, MarketEventType.crash);
+      expect(event.priceMultiplier, greaterThanOrEqualTo(0.55));
+      expect(event.priceMultiplier, lessThanOrEqualTo(0.8));
     });
 
     test('markGameOver sets isGameOver and calls leaderboard addScore once', () async {
