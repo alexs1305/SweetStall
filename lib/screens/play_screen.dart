@@ -112,6 +112,10 @@ class PlayScreen extends StatelessWidget {
                       gameState.player.inventoryQuantity(sweet.id);
                   final canBuy = gameState.player.cash >= buyPrice;
                   final canSell = ownedQuantity > 0;
+                  final maxBuyQuantity = buyPrice > 0
+                      ? (gameState.player.cash / buyPrice).floor()
+                      : 0;
+                  final canBuyMax = maxBuyQuantity > 0;
 
                   final cardColor = _sweetCardColors[sweet.id];
 
@@ -134,26 +138,65 @@ class PlayScreen extends StatelessWidget {
                           ),
                           Text('You own: $ownedQuantity'),
                           const SizedBox(height: 8),
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ElevatedButton(
-                                style: buyButtonStyle,
-                                onPressed: canBuy
-                                    ? () {
-                                        gameActions.buy(sweet.id, 1);
-                                      }
-                                    : null,
-                                child: const Text('Buy 1'),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: [
+                                  ElevatedButton(
+                                    style: buyButtonStyle,
+                                    onPressed: canBuy
+                                        ? () {
+                                            gameActions.buy(sweet.id, 1);
+                                          }
+                                        : null,
+                                    child: const Text('Buy 1'),
+                                  ),
+                                  ElevatedButton(
+                                    style: buyButtonStyle,
+                                    onPressed: canBuyMax
+                                        ? () {
+                                            gameActions.buy(
+                                              sweet.id,
+                                              maxBuyQuantity,
+                                            );
+                                          }
+                                        : null,
+                                    child: const Text('Buy Max'),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 8),
-                              OutlinedButton(
-                                style: outlinedIntentStyle(_sellAccentColor),
-                                onPressed: canSell
-                                    ? () {
-                                        gameActions.sell(sweet.id, 1);
-                                      }
-                                    : null,
-                                child: const Text('Sell 1'),
+                              const SizedBox(height: 8),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: [
+                                  OutlinedButton(
+                                    style:
+                                        outlinedIntentStyle(_sellAccentColor),
+                                    onPressed: canSell
+                                        ? () {
+                                            gameActions.sell(sweet.id, 1);
+                                          }
+                                        : null,
+                                    child: const Text('Sell 1'),
+                                  ),
+                                  OutlinedButton(
+                                    style:
+                                        outlinedIntentStyle(_sellAccentColor),
+                                    onPressed: canSell
+                                        ? () {
+                                            gameActions.sell(
+                                              sweet.id,
+                                              ownedQuantity,
+                                            );
+                                          }
+                                        : null,
+                                    child: const Text('Sell All'),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
