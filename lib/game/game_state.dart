@@ -24,8 +24,8 @@ class GameState extends ChangeNotifier {
   GameState({
     required this.leaderboardService,
     required this.locations,
-    this.startingDays = 10,
-    this.startingCash = 100,
+    this.startingDays = 20,
+    this.startingCash = 20,
     Random? random,
   })  : _random = random ?? Random(),
         _daysLeft = startingDays,
@@ -42,8 +42,8 @@ class GameState extends ChangeNotifier {
 
   factory GameState.withDefaults(
     LeaderboardService leaderboardService, {
-    double startingCash = 100,
-    int startingDays = 10,
+    double startingCash = 20,
+    int startingDays = 20,
     Random? random,
   }) {
     return GameState(
