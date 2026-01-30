@@ -29,6 +29,6 @@ void main() {
 
     expect(find.text('Play'), findsOneWidget);
     expect(find.text('Travel to a new location (−1 day)'), findsOneWidget);
-    expect(find.text('Return home'), findsOneWidget);
+    expect(find.text('Give up'), findsOneWidget);
   });
 }
