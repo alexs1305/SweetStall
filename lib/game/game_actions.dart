@@ -25,7 +25,11 @@ class GameActions {
     gameState.updatePlayer(
       gameState.player.copyWith(currentLocationId: target.id),
     );
-    gameState.updateMarket(gameState.rollMarket(target));
+    final baseMarket = gameState.rollMarket(target);
+    final event = gameState.rollMarketEvent(target);
+    final updatedMarket =
+        event == null ? baseMarket : baseMarket.applyEvent(event);
+    gameState.updateMarketWithEvent(updatedMarket, event);
     // Moving between locations costs 1 day
     await advanceTime();
     return true;

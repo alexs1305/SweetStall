@@ -5,8 +5,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sweetstall/data/game_data.dart';
 import 'package:sweetstall/game/game_actions.dart';
 import 'package:sweetstall/game/game_state.dart';
+import 'package:sweetstall/models/market_event.dart';
 import 'package:sweetstall/screens/play_screen.dart';
 import 'package:sweetstall/services/leaderboard_service.dart';
+
+class FakeGameActions extends GameActions {
+  FakeGameActions(GameState gameState, this.event) : super(gameState);
+
+  final MarketEvent event;
+
+  @override
+  Future<bool> setLocation(String locationId) async {
+    gameState.updatePlayer(
+      gameState.player.copyWith(currentLocationId: locationId),
+    );
+    gameState.updateMarketWithEvent(
+      gameState.market.applyEvent(event),
+      event,
+    );
+    await advanceTime();
+    return true;
+  }
+}
 
 void main() {
   late LeaderboardService leaderboardService;
@@ -22,14 +42,14 @@ void main() {
     gameState = GameState.withDefaults(leaderboardService);
   });
 
-  Widget buildTestWidget() {
+  Widget buildTestWidget({GameActions? actions}) {
     return MaterialApp(
       home: MultiProvider(
         providers: [
           Provider<LeaderboardService>.value(value: leaderboardService),
           ChangeNotifierProvider<GameState>.value(value: gameState),
-          ProxyProvider<GameState, GameActions>(
-            update: (_, state, __) => GameActions(state),
+          Provider<GameActions>.value(
+            value: actions ?? GameActions(gameState),
           ),
         ],
         child: const PlayScreen(),
@@ -59,5 +79,47 @@ void main() {
     expect(find.text('Buy Max'), findsNWidgets(GameData.sweets.length));
     expect(find.text('Sell 1'), findsNWidgets(GameData.sweets.length));
     expect(find.text('Sell All'), findsNWidgets(GameData.sweets.length));
+  });
+
+  testWidgets('PlayScreen shows event badge for affected sweet',
+      (WidgetTester tester) async {
+    final event = MarketEvent(
+      id: 1,
+      sweetId: GameData.sweets.first.id,
+      type: MarketEventType.crash,
+      priceMultiplier: 0.6,
+      occurredAt: DateTime(2024),
+    );
+    gameState.updateMarketWithEvent(
+      gameState.market.applyEvent(event),
+      event,
+    );
+
+    await tester.pumpWidget(buildTestWidget());
+
+    expect(find.text('Crash'), findsOneWidget);
+  });
+
+  testWidgets('PlayScreen shows event dialog after travel',
+      (WidgetTester tester) async {
+    final event = MarketEvent(
+      id: 2,
+      sweetId: GameData.sweets.first.id,
+      type: MarketEventType.shortage,
+      priceMultiplier: 1.5,
+      occurredAt: DateTime(2024),
+    );
+    final actions = FakeGameActions(gameState, event);
+
+    await tester.pumpWidget(buildTestWidget(actions: actions));
+
+    final otherLocation = GameData.locations.firstWhere(
+      (location) => location.id != gameState.currentLocation.id,
+    );
+    await tester.tap(find.text(otherLocation.name));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Demand surge!'), findsOneWidget);
+    expect(find.textContaining('prices are 50% higher'), findsOneWidget);
   });
 }

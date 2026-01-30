@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../data/game_data.dart';
 import '../game/game_actions.dart';
 import '../game/game_state.dart';
+import '../models/market_event.dart';
 import '../widgets/in_game_summary.dart';
 
 const Map<String, Color> _sweetCardColors = {
@@ -16,6 +17,89 @@ const Color _buyFillColor = Color(0xFFBBDEFB);
 const Color _buyTextColor = Color(0xFF0D47A1);
 const Color _sellAccentColor = Color(0xFFEF9A9A);
 const Color _locationAccentColor = Color(0xFF90CAF9);
+const Color _eventCrashColor = Color(0xFFEF9A9A);
+const Color _eventSurgeColor = Color(0xFF81C784);
+
+Future<void> _showMarketEventDialog(
+  BuildContext context,
+  GameState gameState,
+  MarketEvent event,
+) async {
+  final sweetName = GameData.sweetsById[event.sweetId]?.name ?? 'This sweet';
+  final percentChange = ((event.priceMultiplier - 1) * 100).round().abs();
+  final direction = event.isPriceIncrease ? 'higher' : 'lower';
+  final title =
+      event.type == MarketEventType.crash ? 'Market crash!' : 'Demand surge!';
+
+  await showDialog<void>(
+    context: context,
+    builder: (dialogContext) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text(
+          '$sweetName prices are $percentChange% $direction in '
+          '${gameState.currentLocation.name}.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Got it'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+String _eventLabel(MarketEventType type) {
+  return type == MarketEventType.crash ? 'Crash' : 'Surge';
+}
+
+IconData _eventIcon(MarketEventType type) {
+  return type == MarketEventType.crash ? Icons.trending_down : Icons.trending_up;
+}
+
+Color _eventColor(MarketEventType type) {
+  return type == MarketEventType.crash ? _eventCrashColor : _eventSurgeColor;
+}
+
+class _MarketEventBadge extends StatelessWidget {
+  const _MarketEventBadge({required this.event});
+
+  final MarketEvent event;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = _eventColor(event.type);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.6)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            _eventIcon(event.type),
+            size: 14,
+            color: color,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            _eventLabel(event.type),
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class PlayScreen extends StatelessWidget {
   const PlayScreen({super.key});
@@ -99,7 +183,20 @@ class PlayScreen extends StatelessWidget {
                           onPressed: isSelected || !hasDaysLeft
                               ? null
                               : () async {
-                                  await gameActions.setLocation(location.id);
+                                  final moved = await gameActions.setLocation(
+                                    location.id,
+                                  );
+                                  if (!moved || !context.mounted) return;
+
+                                  final event = gameState.marketEvent;
+                                  if (event != null) {
+                                    await _showMarketEventDialog(
+                                      context,
+                                      gameState,
+                                      event,
+                                    );
+                                  }
+
                                   if (context.mounted && gameState.isGameOver) {
                                     Navigator.pushNamed(context, '/game_over');
                                   }
@@ -117,6 +214,8 @@ class PlayScreen extends StatelessWidget {
                             gameState.market.priceFor(sweet.id, buying: false);
                         final ownedQuantity =
                             gameState.player.inventoryQuantity(sweet.id);
+                        final event = gameState.marketEvent;
+                        final isAffected = event?.sweetId == sweet.id;
                         final canBuy = gameState.player.cash >= buyPrice;
                         final canSell = ownedQuantity > 0;
                         final maxBuyQuantity = buyPrice > 0
@@ -135,11 +234,20 @@ class PlayScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  sweet.name,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        sweet.name,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    if (isAffected && event != null)
+                                      _MarketEventBadge(event: event),
+                                  ],
                                 ),
                                 const SizedBox(height: 4),
                                 Text(

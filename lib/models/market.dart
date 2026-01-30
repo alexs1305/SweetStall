@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'location.dart';
+import 'market_event.dart';
 import 'price_range.dart';
 
 class Market {
@@ -50,9 +51,32 @@ class Market {
     return prices[sweetId] ?? 0;
   }
 
+  Market applyEvent(MarketEvent event) {
+    if (!buyPrices.containsKey(event.sweetId)) {
+      return this;
+    }
+
+    final updatedBuy = Map<String, double>.from(buyPrices);
+    final updatedSell = Map<String, double>.from(sellPrices);
+    updatedBuy[event.sweetId] =
+        _roundToCents(updatedBuy[event.sweetId]! * event.priceMultiplier);
+    updatedSell[event.sweetId] =
+        _roundToCents(updatedSell[event.sweetId]! * event.priceMultiplier);
+
+    return Market(
+      locationId: locationId,
+      buyPrices: updatedBuy,
+      sellPrices: updatedSell,
+      generatedAt: generatedAt,
+    );
+  }
+
   static double _sample(PriceRange range, Random random) {
     return range.min + (range.max - range.min) * random.nextDouble();
   }
+
+  static double _roundToCents(double value) =>
+      (value * 100).roundToDouble() / 100;
 
   @override
   String toString() =>

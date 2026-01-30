@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sweetstall/models/location.dart';
 import 'package:sweetstall/models/market.dart';
+import 'package:sweetstall/models/market_event.dart';
 import 'package:sweetstall/models/price_range.dart';
 
 void main() {
@@ -66,6 +67,29 @@ void main() {
       final market = Market.fromLocation(location, random: Random(0));
       expect(market.locationId, 'test');
       expect(market.generatedAt, isNotNull);
+    });
+
+    test('applyEvent adjusts prices for affected sweet only', () {
+      final market = Market(
+        locationId: 'test',
+        buyPrices: {'bubble': 10.0, 'caramel': 5.0},
+        sellPrices: {'bubble': 8.0, 'caramel': 4.0},
+        generatedAt: DateTime(2024),
+      );
+      final event = MarketEvent(
+        id: 1,
+        sweetId: 'bubble',
+        type: MarketEventType.crash,
+        priceMultiplier: 0.6,
+        occurredAt: DateTime(2024),
+      );
+
+      final updated = market.applyEvent(event);
+
+      expect(updated.buyPrices['bubble'], 6.0);
+      expect(updated.sellPrices['bubble'], 4.8);
+      expect(updated.buyPrices['caramel'], 5.0);
+      expect(updated.sellPrices['caramel'], 4.0);
     });
   });
 }
