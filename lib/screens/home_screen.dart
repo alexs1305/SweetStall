@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../game/game_state.dart';
 import '../services/leaderboard_service.dart';
+import '../widgets/high_score_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -36,44 +37,16 @@ class HomeScreen extends StatelessWidget {
                 gameState.resetGame();
                 Navigator.pushNamed(context, '/play');
               },
-              child: const Text('Start trading'),
+              child: const Text('Start playing'),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'High Scores',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
             Expanded(
-              child: leaderboard.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'No scores yet. Play a round to create a high score!',
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  : ListView.separated(
-                      itemCount: leaderboard.length,
-                      separatorBuilder: (_, __) => const Divider(),
-                      itemBuilder: (context, index) {
-                        final entry = leaderboard[index];
-                        return ListTile(
-                          leading: Text('${index + 1}'),
-                          title: Text(
-                            entry.name ?? 'Guest Trader',
-                            style: const TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          trailing: Text(
-                            '\$${entry.score.toStringAsFixed(2)}',
-                          ),
-                          subtitle: entry.date != null
-                              ? Text(
-                                  'Set on ${entry.date!.toLocal().toString().split('.').first}',
-                                )
-                              : null,
-                        );
-                      },
-                    ),
+              child: HighScoreList(
+                entries: leaderboard,
+                title: 'High Scores',
+                emptyMessage:
+                    'No scores yet. Play a round to create a high score!',
+              ),
             ),
           ],
         ),

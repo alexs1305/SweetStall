@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../game/game_state.dart';
 import '../services/leaderboard_service.dart';
+import '../widgets/high_score_list.dart';
 
 class GameOverScreen extends StatelessWidget {
   const GameOverScreen({super.key});
@@ -28,35 +29,12 @@ class GameOverScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text('Final cash: \$${gameState.finalScore.toStringAsFixed(2)}'),
             const SizedBox(height: 16),
-            const Text(
-              'Leaderboard',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
             Expanded(
-              child: leaderboard.isEmpty
-                  ? const Center(
-                      child: Text('No leaderboard entries yet.'),
-                    )
-                  : ListView.separated(
-                      itemCount: leaderboard.length,
-                      separatorBuilder: (_, __) => const Divider(),
-                      itemBuilder: (context, index) {
-                        final entry = leaderboard[index];
-                        return ListTile(
-                          leading: Text('${index + 1}'),
-                          title: Text(entry.name ?? 'Guest Trader'),
-                          trailing: Text(
-                            '\$${entry.score.toStringAsFixed(2)}',
-                          ),
-                          subtitle: entry.date != null
-                              ? Text(
-                                  'Set on ${entry.date!.toLocal().toString().split('.').first}',
-                                )
-                              : null,
-                        );
-                      },
-                    ),
+              child: HighScoreList(
+                entries: leaderboard,
+                title: 'Leaderboard',
+                emptyMessage: 'No leaderboard entries yet.',
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
