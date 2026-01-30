@@ -24,13 +24,10 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              'Sweet Trading Academy',
+              'Can you make a profit?',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
-            Text('Cash on hand: \$${gameState.player.cash.toStringAsFixed(2)}'),
-            Text('Current location: ${gameState.currentLocation.name}'),
-            Text('Days remaining: ${gameState.daysLeft}'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
