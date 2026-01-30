@@ -16,26 +16,29 @@ class GameData {
   static final Map<String, Sweet> sweetsById =
       {for (final sweet in sweets) sweet.id: sweet};
 
+  /// Buy ranges are wide and vary by location so travelling can yield
+  /// profit (sell at new location > buy at previous). Sell is derived
+  /// from buy in Market (85–97%).
   static const locations = [
     Location(
       id: 'uptown',
       name: 'Uptown Market',
       sweetPriceRanges: {
         'bubble': SweetPriceRange(
-          buy: PriceRange(min: 4.0, max: 7.0),
-          sell: PriceRange(min: 8.0, max: 10.0),
+          buy: PriceRange(min: 4.0, max: 9.0),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'caramel': SweetPriceRange(
-          buy: PriceRange(min: 5.0, max: 6.5),
-          sell: PriceRange(min: 9.5, max: 12.5),
+          buy: PriceRange(min: 5.0, max: 10.0),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'mint': SweetPriceRange(
-          buy: PriceRange(min: 3.5, max: 5.0),
-          sell: PriceRange(min: 6.5, max: 8.0),
+          buy: PriceRange(min: 3.0, max: 7.0),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'berry': SweetPriceRange(
-          buy: PriceRange(min: 4.5, max: 6.0),
-          sell: PriceRange(min: 7.5, max: 9.0),
+          buy: PriceRange(min: 4.0, max: 8.5),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
       },
     ),
@@ -44,20 +47,20 @@ class GameData {
       name: 'Harbor Side Bazaar',
       sweetPriceRanges: {
         'bubble': SweetPriceRange(
-          buy: PriceRange(min: 5.5, max: 8.5),
-          sell: PriceRange(min: 9.5, max: 13.0),
+          buy: PriceRange(min: 6.0, max: 11.0),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'caramel': SweetPriceRange(
-          buy: PriceRange(min: 4.0, max: 5.5),
-          sell: PriceRange(min: 8.0, max: 10.0),
+          buy: PriceRange(min: 3.0, max: 7.0),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'mint': SweetPriceRange(
-          buy: PriceRange(min: 3.0, max: 4.0),
-          sell: PriceRange(min: 5.5, max: 7.0),
+          buy: PriceRange(min: 4.0, max: 9.0),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'berry': SweetPriceRange(
-          buy: PriceRange(min: 3.5, max: 5.0),
-          sell: PriceRange(min: 6.5, max: 8.5),
+          buy: PriceRange(min: 2.5, max: 6.5),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
       },
     ),
@@ -66,20 +69,20 @@ class GameData {
       name: 'Meadow Run Pop-Up',
       sweetPriceRanges: {
         'bubble': SweetPriceRange(
-          buy: PriceRange(min: 3.5, max: 5.5),
-          sell: PriceRange(min: 7.5, max: 9.0),
+          buy: PriceRange(min: 2.5, max: 6.0),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'caramel': SweetPriceRange(
-          buy: PriceRange(min: 6.0, max: 8.0),
-          sell: PriceRange(min: 10.5, max: 13.5),
+          buy: PriceRange(min: 6.0, max: 12.0),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'mint': SweetPriceRange(
-          buy: PriceRange(min: 4.0, max: 6.0),
-          sell: PriceRange(min: 8.5, max: 10.0),
+          buy: PriceRange(min: 3.0, max: 8.0),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'berry': SweetPriceRange(
-          buy: PriceRange(min: 5.0, max: 6.5),
-          sell: PriceRange(min: 9.0, max: 11.0),
+          buy: PriceRange(min: 4.5, max: 9.0),
+          sell: PriceRange(min: 0.85, max: 0.97),
         ),
       },
     ),
