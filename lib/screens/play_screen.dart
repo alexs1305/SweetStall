@@ -32,15 +32,26 @@ class PlayScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
+            Text(
+              'Travel to a new location (−1 day)',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+            const SizedBox(height: 4),
             Wrap(
               spacing: 8,
               children: gameState.allLocations.map((location) {
                 final isSelected = location.id == gameState.currentLocation.id;
+                final hasDaysLeft = gameState.daysLeft > 0;
                 return OutlinedButton(
-                  onPressed: isSelected
+                  onPressed: isSelected || !hasDaysLeft
                       ? null
-                      : () {
-                          gameActions.setLocation(location.id);
+                      : () async {
+                          await gameActions.setLocation(location.id);
+                          if (context.mounted && gameState.isGameOver) {
+                            Navigator.pushNamed(context, '/game_over');
+                          }
                         },
                   child: Text(location.name),
                 );
@@ -129,20 +140,6 @@ class PlayScreen extends StatelessWidget {
                 ).toList(),
               ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: gameState.isGameOver
-                  ? null
-                  : () async {
-                      await gameActions.advanceTime();
-                      if (gameState.isGameOver) {
-                        if (context.mounted) {
-                          Navigator.pushNamed(context, '/game_over');
-                        }
-                      }
-                    },
-              child: const Text('End day'),
-            ),
-            const SizedBox(height: 8),
             OutlinedButton(
               onPressed: () => Navigator.popUntil(
                 context,

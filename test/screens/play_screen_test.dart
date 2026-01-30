@@ -37,12 +37,12 @@ void main() {
     );
   }
 
-  testWidgets('PlayScreen shows location, days, cash, Market, End day, Return home', (WidgetTester tester) async {
+  testWidgets('PlayScreen shows location, days, cash, Market, travel hint, Return home', (WidgetTester tester) async {
     await tester.pumpWidget(buildTestWidget());
 
     expect(find.text('Play'), findsOneWidget);
     expect(find.text('Market'), findsOneWidget);
-    expect(find.text('End day'), findsOneWidget);
+    expect(find.text('Travel to a new location (−1 day)'), findsOneWidget);
     expect(find.text('Return home'), findsOneWidget);
     expect(find.textContaining('Current location'), findsOneWidget);
     expect(find.textContaining('Days left'), findsOneWidget);
