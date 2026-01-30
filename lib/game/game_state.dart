@@ -109,7 +109,7 @@ class GameState extends ChangeNotifier {
     _isGameOver = true;
     notifyListeners();
     await leaderboardService.addScore(
-      LeaderboardEntry(score: _player.cash, date: DateTime.now()),
+      LeaderboardEntry(score: _player.cash.round(), date: DateTime.now()),
     );
   }
 }
