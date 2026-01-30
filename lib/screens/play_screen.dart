@@ -5,6 +5,13 @@ import '../data/game_data.dart';
 import '../game/game_actions.dart';
 import '../game/game_state.dart';
 
+const Map<String, Color> _sweetCardColors = {
+  'bubble': Color(0xFFFFF3E0),
+  'caramel': Color(0xFFFFF8E1),
+  'mint': Color(0xFFE8F5E9),
+  'berry': Color(0xFFF3E5F5),
+};
+
 class PlayScreen extends StatelessWidget {
   const PlayScreen({super.key});
 
@@ -69,7 +76,10 @@ class PlayScreen extends StatelessWidget {
                 final canBuy = gameState.player.cash >= buyPrice;
                 final canSell = ownedQuantity > 0;
 
+                final cardColor = _sweetCardColors[sweet.id];
+
                 return Card(
+                  color: cardColor ?? Theme.of(context).colorScheme.surface,
                   margin: const EdgeInsets.symmetric(vertical: 6),
                   child: Padding(
                     padding: const EdgeInsets.all(12),

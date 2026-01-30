@@ -46,3 +46,4 @@ Tasks are ordered by dependency. Agents: pick an unchecked task, implement it, t
 
 - [ ] Tune starting cash, time limit, and price ranges for balance.
 - [ ] Update README with run instructions, dev container usage, and iOS note.
+- [ ] Assign deterministic, distinct card colors for each sweet in the market.
