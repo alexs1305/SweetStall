@@ -11,6 +11,10 @@ const Map<String, Color> _sweetCardColors = {
   'mint': Color(0xFFE8F5E9),
   'berry': Color(0xFFF3E5F5),
 };
+const Color _buyFillColor = Color(0xFFBBDEFB);
+const Color _buyTextColor = Color(0xFF0D47A1);
+const Color _sellAccentColor = Color(0xFFEF9A9A);
+const Color _locationAccentColor = Color(0xFF90CAF9);
 
 class PlayScreen extends StatelessWidget {
   const PlayScreen({super.key});
@@ -20,6 +24,35 @@ class PlayScreen extends StatelessWidget {
     final gameState = context.watch<GameState>();
     final gameActions = context.read<GameActions>();
     final sweets = GameData.sweets;
+    final buyButtonStyle = ButtonStyle(
+      backgroundColor: MaterialStateProperty.resolveWith(
+        (states) => states.contains(MaterialState.disabled)
+            ? _buyFillColor.withOpacity(0.5)
+            : _buyFillColor,
+      ),
+      foregroundColor: MaterialStateProperty.resolveWith(
+        (states) => states.contains(MaterialState.disabled)
+            ? _buyTextColor.withOpacity(0.5)
+            : _buyTextColor,
+      ),
+    );
+    ButtonStyle outlinedIntentStyle(Color color) {
+      return ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith(
+          (states) => states.contains(MaterialState.disabled)
+              ? color.withOpacity(0.4)
+              : color,
+        ),
+        side: MaterialStateProperty.resolveWith(
+          (states) {
+            final resolved = states.contains(MaterialState.disabled)
+                ? color.withOpacity(0.3)
+                : color;
+            return BorderSide(color: resolved);
+          },
+        ),
+      );
+    }
 
     return WillPopScope(
       onWillPop: () async => gameState.isGameOver,
@@ -55,6 +88,7 @@ class PlayScreen extends StatelessWidget {
                   final isSelected = location.id == gameState.currentLocation.id;
                   final hasDaysLeft = gameState.daysLeft > 0;
                   return OutlinedButton(
+                    style: outlinedIntentStyle(_locationAccentColor),
                     onPressed: isSelected || !hasDaysLeft
                         ? null
                         : () async {
@@ -103,6 +137,7 @@ class PlayScreen extends StatelessWidget {
                           Row(
                             children: [
                               ElevatedButton(
+                                style: buyButtonStyle,
                                 onPressed: canBuy
                                     ? () {
                                         gameActions.buy(sweet.id, 1);
@@ -112,6 +147,7 @@ class PlayScreen extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               OutlinedButton(
+                                style: outlinedIntentStyle(_sellAccentColor),
                                 onPressed: canSell
                                     ? () {
                                         gameActions.sell(sweet.id, 1);
