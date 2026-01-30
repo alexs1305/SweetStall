@@ -25,19 +25,19 @@ class GameData {
       name: 'Uptown Market',
       sweetPriceRanges: {
         'bubble': SweetPriceRange(
-          buy: PriceRange(min: 4.0, max: 9.0),
+          buy: PriceRange(min: 32.0, max: 40.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'caramel': SweetPriceRange(
-          buy: PriceRange(min: 5.0, max: 10.0),
+          buy: PriceRange(min: 27.0, max: 35.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'mint': SweetPriceRange(
-          buy: PriceRange(min: 3.0, max: 7.0),
+          buy: PriceRange(min: 12.0, max: 18.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'berry': SweetPriceRange(
-          buy: PriceRange(min: 4.0, max: 8.5),
+          buy: PriceRange(min: 6.0, max: 14.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
       },
@@ -47,19 +47,19 @@ class GameData {
       name: 'Harbor Side Bazaar',
       sweetPriceRanges: {
         'bubble': SweetPriceRange(
-          buy: PriceRange(min: 6.0, max: 11.0),
+          buy: PriceRange(min: 30.0, max: 38.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'caramel': SweetPriceRange(
-          buy: PriceRange(min: 3.0, max: 7.0),
+          buy: PriceRange(min: 25.0, max: 33.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'mint': SweetPriceRange(
-          buy: PriceRange(min: 4.0, max: 9.0),
+          buy: PriceRange(min: 11.0, max: 19.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'berry': SweetPriceRange(
-          buy: PriceRange(min: 2.5, max: 6.5),
+          buy: PriceRange(min: 5.0, max: 13.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
       },
@@ -69,19 +69,19 @@ class GameData {
       name: 'Meadow Run Pop-Up',
       sweetPriceRanges: {
         'bubble': SweetPriceRange(
-          buy: PriceRange(min: 2.5, max: 6.0),
+          buy: PriceRange(min: 31.0, max: 39.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'caramel': SweetPriceRange(
-          buy: PriceRange(min: 6.0, max: 12.0),
+          buy: PriceRange(min: 26.0, max: 34.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'mint': SweetPriceRange(
-          buy: PriceRange(min: 3.0, max: 8.0),
+          buy: PriceRange(min: 10.0, max: 20.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
         'berry': SweetPriceRange(
-          buy: PriceRange(min: 4.5, max: 9.0),
+          buy: PriceRange(min: 7.0, max: 15.0),
           sell: PriceRange(min: 0.85, max: 0.97),
         ),
       },
