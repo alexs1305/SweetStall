@@ -24,12 +24,12 @@ Tasks are ordered by dependency. Agents: pick an unchecked task, implement it, t
 
 ## 4. Leaderboard persistence
 
-- [ ] Create `lib/services/leaderboard_service.dart`: load/save top N from shared_preferences (or file), add score, get sorted list.
+- [x] Create `lib/services/leaderboard_service.dart`: load/save top N from shared_preferences (or file), add score, get sorted list.
 
 ## 5. Game state and actions
 
-- [ ] Create `lib/game/game_state.dart`: single source of truth (e.g. ChangeNotifier) for player, time left, market, locations; game-over flag.
-- [ ] Create `lib/game/game_actions.dart`: setLocation (roll prices), buy, sell, advance time; call leaderboard when time = 0.
+- [x] Create `lib/game/game_state.dart`: single source of truth (e.g. ChangeNotifier) for player, time left, market, locations; game-over flag.
+- [x] Create `lib/game/game_actions.dart`: setLocation (roll prices), buy, sell, advance time; call leaderboard when time = 0.
 
 ## 6. App shell and navigation
 
