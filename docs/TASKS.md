@@ -33,14 +33,14 @@ Tasks are ordered by dependency. Agents: pick an unchecked task, implement it, t
 
 ## 6. App shell and navigation
 
-- [ ] Create `lib/app.dart`: MaterialApp and routes (home, play, game_over).
-- [ ] Wire `lib/main.dart` to app and state (e.g. Provider/Riverpod at root).
+- [x] Create `lib/app.dart`: MaterialApp and routes (home, play, game_over).
+- [x] Wire `lib/main.dart` to app and state (e.g. Provider/Riverpod at root).
 
 ## 7. Screens and UI
 
-- [ ] Create `lib/screens/home_screen.dart`: Start game button + high scores list (from leaderboard service).
-- [ ] Create `lib/screens/play_screen.dart`: current location, days left, cash; market (buy/sell prices + buttons); inventory; travel button.
-- [ ] Create `lib/screens/game_over_screen.dart`: final score, submit to leaderboard if qualifying, show leaderboard, back to home.
+- [x] Create `lib/screens/home_screen.dart`: Start game button + high scores list (from leaderboard service).
+- [x] Create `lib/screens/play_screen.dart`: current location, days left, cash; market (buy/sell prices + buttons); inventory; travel button.
+- [x] Create `lib/screens/game_over_screen.dart`: final score, submit to leaderboard if qualifying, show leaderboard, back to home.
 
 ## 8. Polish and docs
 
